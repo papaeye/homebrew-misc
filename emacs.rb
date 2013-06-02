@@ -9,10 +9,12 @@ class Emacs < Formula
   depends_on :autoconf
   depends_on :automake
 
-  # Make Mac port self-contained
   def patches
     [
-     'https://gist.github.com/papaeye/5187924/raw/d07175f714cc0e5182ed5478bdb0c92ecbb558c6/mac-self-contained.patch'
+     # Make Mac port self-contained
+     'https://gist.github.com/papaeye/5187924/raw/d07175f714cc0e5182ed5478bdb0c92ecbb558c6/mac-self-contained.patch',
+     # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=14156
+     'https://gist.github.com/papaeye/5693703/raw/10a05fb40180f47107e16e14a7835acd7e890fb9/bug14156-emacs24.3.patch'
     ]
   end
 
@@ -62,13 +64,13 @@ class Emacs < Formula
 end
 
 class EmacsMacPortPatch < Formula
-  url 'ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.3-mac-4.0.tar.gz'
-  sha1 'a53689d67dd6a1a1d997cb177a0371f89b6757d9'
+  url 'ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.3-mac-4.2.tar.gz'
+  sha1 'c3745fc2bd6817a750ff132f84d4aea4a1533810'
 
   # http://papaeye.tumblr.com/post/27256875523/emacs-mac-port
   def patches
     [
-     'https://gist.github.com/papaeye/5187551/raw/f221674ab0be67f611e49b8f871e066db94d008b/tweak-font-height.patch'
+     'https://gist.github.com/papaeye/5187551/raw/7995bb89324089843b3b80cf79a766f5973c7e95/tweak-font-height.patch'
     ]
   end
 end
