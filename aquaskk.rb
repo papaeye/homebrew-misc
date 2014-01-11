@@ -2,11 +2,15 @@ require 'formula'
 
 class Aquaskk < Formula
   homepage 'http://aquaskk.sourceforge.jp/'
-  head 'svn+http://svn.sourceforge.jp/svnroot/aquaskk/aquaskk/trunk'
+  head 'https://github.com/t-suwa/aquaskk.git'
 
-  # 64bit build + 10.8 SDK
   def patches
-    DATA
+    [
+      # 64bit build + Latest OS X SDK
+      DATA,
+      # sticky key support (https://gist.github.com/anyakichi/1242540)
+      'https://gist.github.com/papaeye/8368908/raw/6053615ae23736baaf24a566d837d9cf5b7bdd79/aquaskk-sticky-key.patch'
+    ]
   end
 
   def install
@@ -26,41 +30,42 @@ end
 
 __END__
 diff --git a/platform/mac/proj/AquaSKK.xcodeproj/project.pbxproj b/platform/mac/proj/AquaSKK.xcodeproj/project.pbxproj
-index 4b6c403..eec1bef 100644
+index 4b6c403..b2137df 100644
 --- a/platform/mac/proj/AquaSKK.xcodeproj/project.pbxproj
 +++ b/platform/mac/proj/AquaSKK.xcodeproj/project.pbxproj
-@@ -1076,14 +1076,14 @@
+@@ -1074,7 +1074,7 @@
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
  				GCC_WARN_UNUSED_VARIABLE = YES;
- 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+-				MACOSX_DEPLOYMENT_TARGET = 10.7;
++				MACOSX_DEPLOYMENT_TARGET = 10.9;
  				RUN_CLANG_STATIC_ANALYZER = YES;
--				SDKROOT = macosx;
-+				SDKROOT = macosx10.8;
+ 				SDKROOT = macosx;
  			};
- 			name = Debug;
- 		};
+@@ -1083,7 +1083,7 @@
  		C01FCF5008A954540054247B /* Release */ = {
  			isa = XCBuildConfiguration;
  			buildSettings = {
 -				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
++				ARCHS = "$(ARCHS_STANDARD)";
  				CLANG_WARN_CONSTANT_CONVERSION = YES;
  				CLANG_WARN_ENUM_CONVERSION = YES;
  				CLANG_WARN_INT_CONVERSION = YES;
-@@ -1095,7 +1095,7 @@
+@@ -1093,7 +1093,7 @@
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
  				GCC_WARN_UNUSED_VARIABLE = YES;
- 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+-				MACOSX_DEPLOYMENT_TARGET = 10.7;
++				MACOSX_DEPLOYMENT_TARGET = 10.9;
  				RUN_CLANG_STATIC_ANALYZER = YES;
--				SDKROOT = macosx;
-+				SDKROOT = macosx10.8;
+ 				SDKROOT = macosx;
  			};
- 			name = Release;
- 		};
 @@ -1131,7 +1131,7 @@
  				);
  				PRODUCT_NAME = AquaSKK;
  				RUN_CLANG_STATIC_ANALYZER = YES;
 -				SDKROOT = macosx10.7;
-+				SDKROOT = macosx10.8;
++				SDKROOT = macosx;
  				WRAPPER_EXTENSION = app;
  				ZERO_LINK = YES;
  			};
@@ -69,7 +74,7 @@ index 4b6c403..eec1bef 100644
  				PRODUCT_NAME = AquaSKK;
  				RUN_CLANG_STATIC_ANALYZER = YES;
 -				SDKROOT = macosx10.7;
-+				SDKROOT = macosx10.8;
++				SDKROOT = macosx;
  				WRAPPER_EXTENSION = app;
  				ZERO_LINK = NO;
  			};
@@ -78,7 +83,7 @@ index 4b6c403..eec1bef 100644
  				PRODUCT_NAME = AquaSKKPreferences;
  				RUN_CLANG_STATIC_ANALYZER = YES;
 -				SDKROOT = macosx10.7;
-+				SDKROOT = macosx10.8;
++				SDKROOT = macosx;
  				WRAPPER_EXTENSION = app;
  			};
  			name = Debug;
@@ -87,7 +92,7 @@ index 4b6c403..eec1bef 100644
  				PRODUCT_NAME = AquaSKKPreferences;
  				RUN_CLANG_STATIC_ANALYZER = YES;
 -				SDKROOT = macosx10.7;
-+				SDKROOT = macosx10.8;
++				SDKROOT = macosx;
  				WRAPPER_EXTENSION = app;
  			};
  			name = Release;
