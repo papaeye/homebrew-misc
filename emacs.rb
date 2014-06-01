@@ -64,8 +64,8 @@ class Emacs < Formula
 end
 
 class EmacsMacPortPatch < Formula
-  url 'ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.3-mac-4.6.tar.gz'
-  sha1 '3b980d3ce6fb774955abe82e70680ec6d022b376'
+  url 'ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.3-mac-4.8.tar.gz'
+  sha1 '0fe243f9ca60ead00b692026a26813d6713d1473'
 
   # http://papaeye.tumblr.com/post/27256875523/emacs-mac-port
   def patches
