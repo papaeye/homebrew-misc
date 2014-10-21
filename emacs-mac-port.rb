@@ -1,76 +1,65 @@
-require 'formula'
+require "formula"
 
-class Emacs < Formula
-  homepage 'http://www.gnu.org/software/emacs/'
-  url 'http://ftpmirror.gnu.org/emacs/emacs-24.3.tar.gz'
-  mirror 'http://ftp.gnu.org/pub/gnu/emacs/emacs-24.3.tar.gz'
-  sha256 '0098ca3204813d69cd8412045ba33e8701fa2062f4bff56bedafc064979eef41'
+class EmacsMacPort < Formula
+  homepage "https://www.gnu.org/software/emacs/"
+  url "http://ftpmirror.gnu.org/emacs/emacs-24.4.tar.xz"
+  mirror "https://ftp.gnu.org/pub/gnu/emacs/emacs-24.4.tar.xz"
+  sha256 "47e391170db4ca0a3c724530c7050655f6d573a711956b4cd84693c194a9d4fd"
 
-  depends_on :autoconf
-  depends_on :automake
+  resource "mac-port" do
+    url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4-mac-5.0.tar.gz"
+    sha256 "fb3740cc9c419883741054300dc87c83c2cd80ece23e4899166081fd2b9f3792"
+  end
 
-  def patches
-    [
-     # Make Mac port self-contained
-     'https://gist.github.com/papaeye/5187924/raw/d07175f714cc0e5182ed5478bdb0c92ecbb558c6/mac-self-contained.patch',
-     # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=14156
-     'https://gist.github.com/papaeye/5693703/raw/10a05fb40180f47107e16e14a7835acd7e890fb9/bug14156-emacs24.3.patch'
-    ]
+  resource "hires-icons" do
+    url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-hires-icons-1.0.tar.gz"
+    sha256 "111c2f437bbed002480bad76c838caf86fe408da65137ec8ffc8ad1f45560b94"
+  end
+
+  patch do
+    # http://papaeye.tumblr.com/post/27256875523/emacs-mac-port
+    url "https://gist.githubusercontent.com/papaeye/5187551/raw/eb1752c06e5820c673b2925cb2f940f7f7851f52/tweak-font-height.patch"
+    sha256 '8786bdc88127a85efe8d50ea6a0be1e1207b2fa7006b70c31e784ad2b3a7dfd6'
   end
 
   def install
-    patch_mac_port
+    resource("mac-port").stage do
+      system "/usr/bin/patch", "-p0", "-d", buildpath, "-i", Pathname.pwd/"patch-mac"
 
-    ENV['CC'] = 'clang -fobjc-arc'
-    ENV['LANG'] = 'C'
+      mv "mac", buildpath
+      mv buildpath/"nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns",
+         buildpath/"mac/Emacs.app/Contents/Resources/Emacs.icns"
+      mv Dir["src/*"], buildpath/"src"
+      mv "lisp/term/mac-win.el", buildpath/"lisp/term"
+    end
 
-    # from configure.in
-    appbindir = prefix+'Emacs.app/Contents/MacOS'
-    appresdir = prefix+'Emacs.app/Contents/Resources'
-    args = ["--without-dbus",
-            "--with-mac",
-            "--enable-locallisppath=#{appresdir+'sitelisp'}",
-            "--enable-mac-app=#{prefix}"]
+    resource("hires-icons").stage do
+      mv Dir["etc/images/*"], buildpath/"etc/images"
+    end
+
+    ENV["CC"] = "clang -fobjc-arc"
+
+    args = [
+      "--prefix=#{prefix}/Emacs.app/Contents/Resources",
+      "--exec-prefix=#{prefix}/Emacs.app/Contents/MacOS",
+      "--datarootdir=#{prefix}/Emacs.app/Contents/Resources",
+      "--enable-locallisppath=#{prefix}/Emacs.app/Contents/Resources/site-lisp",
+      "--with-mac",
+      "--enable-mac-app=#{prefix}"
+    ]
     system "./configure", *args
-    system "make bootstrap"
+    system "make"
     system "make install"
 
-    # from Makefile.in
-    unless (appresdir+'site-lisp/subdirs.el').file?
-      mkdir_p appresdir+'site-lisp'
-      (appresdir+'site-lisp/subdirs.el').write <<-EOS.undent
-        (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-            (normal-top-level-add-subdirs-to-load-path))
-      EOS
-    end
-    rm_f Dir[appbindir+'bin/{emacs,emacs-*}']
-    rm_rf appresdir+'share'
-  end
+    rm prefix/"Emacs.app/Contents/MacOS/bin/emacs"
+    rm prefix/"Emacs.app/Contents/MacOS/bin/emacs-#{version}"
 
-  def patch_mac_port
-    pwd = Pathname.pwd
+    mv Dir[prefix/"Emacs.app/Contents/Resources/emacs/#{version}/*"],
+       prefix/"Emacs.app/Contents/Resources"
+    rm_rf prefix/"Emacs.app/Contents/Resources/emacs"
 
-    EmacsMacPortPatch.new.brew do
-      safe_system '/usr/bin/patch', '-p0', '-d', pwd, '-i', Pathname.pwd+'patch-mac'
-
-      mv 'mac', pwd
-      mv pwd+'nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns',
-         pwd+'mac/Emacs.app/Contents/Resources/Emacs.icns'
-      mv Dir['etc/images/*'], pwd+'etc/images'
-      mv Dir['src/*'], pwd+'src'
-      mv 'lisp/term/mac-win.el', pwd+'lisp/term'
-    end
-  end
-end
-
-class EmacsMacPortPatch < Formula
-  url 'ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.3-mac-4.8.tar.gz'
-  sha1 '0fe243f9ca60ead00b692026a26813d6713d1473'
-
-  # http://papaeye.tumblr.com/post/27256875523/emacs-mac-port
-  def patches
-    [
-     'https://gist.github.com/papaeye/5187551/raw/7995bb89324089843b3b80cf79a766f5973c7e95/tweak-font-height.patch'
-    ]
+    rm_rf prefix/"Emacs.app/Contents/Resources/applications"
+    rm_rf prefix/"Emacs.app/Contents/Resources/icons"
+    rm_rf prefix/"Emacs.app/Contents/Resources/var"
   end
 end
