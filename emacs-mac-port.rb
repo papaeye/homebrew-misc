@@ -18,8 +18,8 @@ class EmacsMacPort < Formula
 
   patch do
     # http://papaeye.tumblr.com/post/27256875523/emacs-mac-port
-    url "https://gist.githubusercontent.com/papaeye/5187551/raw/eb1752c06e5820c673b2925cb2f940f7f7851f52/tweak-font-height.patch"
-    sha256 '8786bdc88127a85efe8d50ea6a0be1e1207b2fa7006b70c31e784ad2b3a7dfd6'
+    url "https://gist.githubusercontent.com/papaeye/5187551/raw/a310175afbc7149d08b1505e5c4f2f87c6ca7fe6/tweak-font-height.patch"
+    sha256 '07af7d1946b8ee4a693288a1abc3cf8e7076f3341595c3c9b14d130e7f29d29b'
   end
 
   def install
