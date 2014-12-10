@@ -61,5 +61,10 @@ class EmacsMacPort < Formula
     rm_rf prefix/"Emacs.app/Contents/Resources/applications"
     rm_rf prefix/"Emacs.app/Contents/Resources/icons"
     rm_rf prefix/"Emacs.app/Contents/Resources/var"
+
+    (bin/"emacs").write <<-EOS.undent
+      #!/bin/bash
+      exec #{prefix}/Emacs.app/Contents/MacOS/Emacs -nw  "$@"
+    EOS
   end
 end
