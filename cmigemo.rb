@@ -2,58 +2,54 @@ require 'formula'
 
 class Cmigemo < Formula
   homepage 'http://www.kaoriya.net/software/cmigemo'
-  url 'http://cmigemo.googlecode.com/files/cmigemo-default-src-20110227.zip'
-  sha1 '25e279c56d3a8f1e82cbfb3526d1b38742d1d66c'
+  head 'https://github.com/koron/cmigemo.git'
+
+  # Revert koron/cmigemo@e5aeae17daa16f0e2b8dc200ee8093c2bc7a89fe
+  patch :DATA
 
   depends_on 'nkf' => :build
 
-  # Patch per discussion at: https://github.com/mxcl/homebrew/pull/7005
-  def patches
-    DATA
-  end
-
   def install
-    ENV.j1
-
-    chmod 0755, 'configure'
+    system "chmod +x ./configure"
     system "./configure", "--prefix=#{prefix}"
     system "make osx"
     system "make osx-dict"
-    cd 'dict' do
-      system "make utf-8"
-    end
+    ENV.j1 # Install can fail on multi-core machines unless serialized
     system "make osx-install"
-    system "install_name_tool -change libmigemo.1.dylib #{prefix}/lib/libmigemo.1.dylib #{prefix}/bin/cmigemo"
- end
+  end
 
   def caveats; <<-EOS.undent
-    See also https://gist.github.com/457761 to use cmigemo with Emacs.
+    See also https://github.com/emacs-jp/migemo to use cmigemo with Emacs.
     You will have to save as migemo.el and put it in your load-path.
     EOS
   end
 end
 
 __END__
-diff --git a/dict/dict.mak b/dict/dict.mak
-index 49435d6..a5e6f1a 100644
---- a/dict/dict.mak
-+++ b/dict/dict.mak
-@@ -6,7 +6,7 @@
+diff --git a/src/main.c b/src/main.c
+index e0ef1ba..4abb344 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -178,7 +178,7 @@ main(int argc, char** argv)
+ 	    migemo_set_operator(pmigemo, MIGEMO_OPINDEX_NEST_IN, "\\(");
+ 	    migemo_set_operator(pmigemo, MIGEMO_OPINDEX_NEST_OUT, "\\)");
+ 	    if (!mode_nonewline)
+-		migemo_set_operator(pmigemo, MIGEMO_OPINDEX_NEWLINE, "[[:space:]\r\n]*");
++		migemo_set_operator(pmigemo, MIGEMO_OPINDEX_NEWLINE, "\\s-*");
+ 	}
+ #ifndef _PROFILE
+ 	if (word)
+	Modified   src/rxgen.c
+diff --git a/src/rxgen.c b/src/rxgen.c
+index afe2b3d..27bde73 100644
+--- a/src/rxgen.c
++++ b/src/rxgen.c
+@@ -22,7 +22,7 @@
+ #define RXGEN_ENC_SJISTINY
+ //#define RXGEN_OP_VIM
  
- DICT 		= migemo-dict
- DICT_BASE	= base-dict
--SKKDIC_BASEURL 	= http://openlab.ring.gr.jp/skk/dic
-+SKKDIC_BASEURL 	= http://www.ring.gr.jp/archives/elisp/skk/dic
- SKKDIC_FILE	= SKK-JISYO.L
- EUCJP_DIR	= euc-jp.d
- UTF8_DIR	= utf-8.d
---- a/src/wordbuf.c	2011-08-15 02:57:05.000000000 +0900
-+++ b/src/wordbuf.c	2011-08-15 02:57:17.000000000 +0900
-@@ -9,6 +9,7 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <limits.h>
- #include "wordbuf.h"
- 
- #define WORDLEN_DEF 64
+-#define RXGEN_OP_MAXLEN 16
++#define RXGEN_OP_MAXLEN 8
+ #define RXGEN_OP_OR "|"
+ #define RXGEN_OP_NEST_IN "("
+ #define RXGEN_OP_NEST_OUT ")"
