@@ -7,8 +7,8 @@ class EmacsMacPort < Formula
   sha256 "47e391170db4ca0a3c724530c7050655f6d573a711956b4cd84693c194a9d4fd"
 
   resource "mac-port" do
-    url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4-mac-5.2.tar.gz"
-    sha1 "35767fa6c7028e630af35f5d6adf5129c26a41b4"
+    url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4-mac-5.3.tar.gz"
+    sha1 "324dff20ddffdfc53a8b18c29fc1b386df4b6762"
   end
 
   resource "hires-icons" do
