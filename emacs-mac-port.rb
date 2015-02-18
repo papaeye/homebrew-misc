@@ -2,13 +2,26 @@ require "formula"
 
 class EmacsMacPort < Formula
   homepage "https://www.gnu.org/software/emacs/"
-  url "http://ftpmirror.gnu.org/emacs/emacs-24.4.tar.xz"
-  mirror "https://ftp.gnu.org/pub/gnu/emacs/emacs-24.4.tar.xz"
-  sha256 "47e391170db4ca0a3c724530c7050655f6d573a711956b4cd84693c194a9d4fd"
 
-  resource "mac-port" do
-    url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4-mac-5.3.tar.gz"
-    sha1 "324dff20ddffdfc53a8b18c29fc1b386df4b6762"
+  stable do
+    url "http://ftpmirror.gnu.org/emacs/emacs-24.4.tar.xz"
+    mirror "https://ftp.gnu.org/pub/gnu/emacs/emacs-24.4.tar.xz"
+    sha256 "47e391170db4ca0a3c724530c7050655f6d573a711956b4cd84693c194a9d4fd"
+
+    resource "mac-port" do
+      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4-mac-5.3.tar.gz"
+      sha1 "324dff20ddffdfc53a8b18c29fc1b386df4b6762"
+    end
+  end
+
+  devel do
+    url "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-24.4.90.tar.xz"
+    sha1 "47f2b6ec3b76015b35ee75481e9922226d5456c8"
+
+    resource "mac-port" do
+      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4.90-mac-5.4.tar.gz"
+      sha1 "ad86080729e0b6c01f3c359a07f23a4b8dad12fd"
+    end
   end
 
   resource "hires-icons" do
@@ -24,7 +37,9 @@ class EmacsMacPort < Formula
 
   def install
     resource("mac-port").stage do
-      system "/usr/bin/patch", "-p0", "-d", buildpath, "-i", Pathname.pwd/"patch-mac"
+      system "/usr/bin/patch",
+             build.devel? ? "-p1" : "-p0",
+             "-d", buildpath, "-i", Pathname.pwd/"patch-mac"
 
       mv "mac", buildpath
       mv buildpath/"nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns",
