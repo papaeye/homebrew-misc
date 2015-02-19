@@ -22,6 +22,8 @@ class EmacsMacPort < Formula
     end
   end
 
+  option "with-arc", "Enable ARC support"
+
   resource "hires-icons" do
     url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-hires-icons-1.0.tar.gz"
     sha256 "111c2f437bbed002480bad76c838caf86fe408da65137ec8ffc8ad1f45560b94"
@@ -50,7 +52,9 @@ class EmacsMacPort < Formula
       mv Dir["etc/images/*"], buildpath/"etc/images"
     end
 
-    ENV["CC"] = "clang -fobjc-arc"
+    if build.with?("arc") && ENV.compiler == :clang
+      ENV.append_to_cflags "-fobjc-arc"
+    end
 
     args = [
       "--prefix=#{prefix}/Emacs.app/Contents/Resources",
