@@ -1,5 +1,3 @@
-require "formula"
-
 class EmacsMacPort < Formula
   homepage "https://www.gnu.org/software/emacs/"
 

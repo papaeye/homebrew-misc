@@ -1,5 +1,3 @@
-require 'formula'
-
 class Cmigemo < Formula
   homepage "http://www.kaoriya.net/software/cmigemo"
   head "https://github.com/papaeye/cmigemo.git", :branch => "spike/add-op-regexmeta"

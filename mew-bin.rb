@@ -1,5 +1,3 @@
-require "formula"
-
 class MewBin < Formula
   homepage "http://mew.org/"
   url "http://mew.org/Release/mew-6.6.tar.gz"

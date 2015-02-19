@@ -1,5 +1,3 @@
-require 'formula'
-
 class Keepassx < Formula
   homepage 'http://www.keepassx.org/'
   url 'http://downloads.sourceforge.net/keepassx/keepassx-0.4.3.tar.gz'

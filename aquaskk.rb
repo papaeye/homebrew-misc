@@ -1,5 +1,3 @@
-require 'formula'
-
 class Aquaskk < Formula
   homepage 'http://aquaskk.sourceforge.jp/'
   head 'https://github.com/codefirst/aquaskk.git'
