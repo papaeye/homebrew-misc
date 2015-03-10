@@ -13,12 +13,12 @@ class EmacsMacPort < Formula
   end
 
   devel do
-    url "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-24.4.90.tar.xz"
-    sha1 "47f2b6ec3b76015b35ee75481e9922226d5456c8"
+    url "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-24.4.91.tar.xz"
+    sha1 "58268a68ad5eff53e7a97e7e90f3cf54ee99c298"
 
     resource "mac-port" do
-      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4.90-mac-5.4.tar.gz"
-      sha1 "ad86080729e0b6c01f3c359a07f23a4b8dad12fd"
+      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4.91-mac-5.5.tar.gz"
+      sha1 "ea30537ba24c8ae752d89c09a16a272c3f8e7ca4"
     end
   end
 
