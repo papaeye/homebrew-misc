@@ -13,12 +13,13 @@ class EmacsMacPort < Formula
   end
 
   devel do
-    url "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-24.4.91.tar.xz"
-    sha1 "58268a68ad5eff53e7a97e7e90f3cf54ee99c298"
+    url "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-24.5-rc1.tar.xz"
+    sha256 "f5c15527cf7b470423633c189ab1210a9ddef0f824b422f17dc00ca1bd015104"
+    version "24.5-rc1-mac-5.6"
 
     resource "mac-port" do
-      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4.91-mac-5.5.tar.gz"
-      sha1 "ea30537ba24c8ae752d89c09a16a272c3f8e7ca4"
+      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.5-rc1-mac-5.6.tar.gz"
+      sha256 "cdc6183bb15f91f76902d2923f095a37a72aade180065f969cd21d771063dce8"
     end
   end
 
@@ -68,10 +69,12 @@ class EmacsMacPort < Formula
     system "make"
     system "make install"
 
-    rm prefix/"Emacs.app/Contents/MacOS/bin/emacs"
-    rm prefix/"Emacs.app/Contents/MacOS/bin/emacs-#{version}"
+    emacs_version = version.to_s.split("-")[0]
 
-    mv Dir[prefix/"Emacs.app/Contents/Resources/emacs/#{version}/*"],
+    rm prefix/"Emacs.app/Contents/MacOS/bin/emacs"
+    rm prefix/"Emacs.app/Contents/MacOS/bin/emacs-#{emacs_version}"
+
+    mv Dir[prefix/"Emacs.app/Contents/Resources/emacs/#{emacs_version}/*"],
        prefix/"Emacs.app/Contents/Resources"
     rm_rf prefix/"Emacs.app/Contents/Resources/emacs"
 
