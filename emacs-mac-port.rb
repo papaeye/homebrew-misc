@@ -23,6 +23,7 @@ class EmacsMacPort < Formula
     end
   end
 
+  option "with-ctags", "Don't remove the ctags executable that emacs provides"
   option "with-arc", "Enable ARC support"
 
   resource "hires-icons" do
@@ -68,6 +69,13 @@ class EmacsMacPort < Formula
     system "./configure", *args
     system "make"
     system "make install"
+
+    # Follow MacPorts and don't install ctags from Emacs. This allows Vim
+    # and Emacs and ctags to play together without violence.
+    if build.without? "ctags"
+      (prefix/"Emacs.app/Contents/MacOS/bin/ctags").unlink
+      (prefix/"Emacs.app/Contents/Resources/man/man1/ctags.1.gz").unlink
+    end
 
     emacs_version = version.to_s.split("-")[0]
 
