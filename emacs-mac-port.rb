@@ -2,24 +2,14 @@ class EmacsMacPort < Formula
   homepage "https://www.gnu.org/software/emacs/"
 
   stable do
-    url "http://ftpmirror.gnu.org/emacs/emacs-24.4.tar.xz"
-    mirror "https://ftp.gnu.org/pub/gnu/emacs/emacs-24.4.tar.xz"
-    sha256 "47e391170db4ca0a3c724530c7050655f6d573a711956b4cd84693c194a9d4fd"
+    url "http://ftpmirror.gnu.org/emacs/emacs-24.5.tar.xz"
+    mirror "https://ftp.gnu.org/pub/gnu/emacs/emacs-24.5.tar.xz"
+    sha256 "dd47d71dd2a526cf6b47cb49af793ec2e26af69a0951cc40e43ae290eacfc34e"
+    version "24.5-mac-5.7"
 
     resource "mac-port" do
-      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.4-mac-5.3.tar.gz"
-      sha1 "324dff20ddffdfc53a8b18c29fc1b386df4b6762"
-    end
-  end
-
-  devel do
-    url "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-24.5-rc1.tar.xz"
-    sha256 "f5c15527cf7b470423633c189ab1210a9ddef0f824b422f17dc00ca1bd015104"
-    version "24.5-rc1-mac-5.6"
-
-    resource "mac-port" do
-      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.5-rc1-mac-5.6.tar.gz"
-      sha256 "cdc6183bb15f91f76902d2923f095a37a72aade180065f969cd21d771063dce8"
+      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.5-mac-5.7.tar.gz"
+      sha256 "7b6b0a7d0d4854e086b72c6a34f24babfa9e57371665436bea444053caa006a9"
     end
   end
 
@@ -39,9 +29,7 @@ class EmacsMacPort < Formula
 
   def install
     resource("mac-port").stage do
-      system "/usr/bin/patch",
-             build.devel? ? "-p1" : "-p0",
-             "-d", buildpath, "-i", Pathname.pwd/"patch-mac"
+      system "/usr/bin/patch", "-p1", "-d", buildpath, "-i", Pathname.pwd/"patch-mac"
 
       mv "mac", buildpath
       mv buildpath/"nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns",
