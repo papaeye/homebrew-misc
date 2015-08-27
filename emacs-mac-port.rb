@@ -5,11 +5,11 @@ class EmacsMacPort < Formula
     url "http://ftpmirror.gnu.org/emacs/emacs-24.5.tar.xz"
     mirror "https://ftp.gnu.org/pub/gnu/emacs/emacs-24.5.tar.xz"
     sha256 "dd47d71dd2a526cf6b47cb49af793ec2e26af69a0951cc40e43ae290eacfc34e"
-    version "24.5-mac-5.9"
+    version "24.5-mac-5.10"
 
     resource "mac-port" do
-      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.5-mac-5.9.tar.gz"
-      sha256 "19f3a9d223564667d62e82263075c21c6e04d1dceb6ba8b10dd15a2a9f9a5af6"
+      url "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-24.5-mac-5.10.tar.gz"
+      sha256 "6e0742f1730bab67a09fc36c6e6297fefcbec8cc272f5ac251abb18e5f259934"
     end
   end
 
